@@ -1,0 +1,30 @@
+{
+  "name": "unisphere-backend",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/patil-piyush/Unisphere-Backend#readme",
+  "bugs": {
+    "url": "https://github.com/patil-piyush/Unisphere-Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patil-piyush/Unisphere-Backend.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.1",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.10"
+  }
+}
