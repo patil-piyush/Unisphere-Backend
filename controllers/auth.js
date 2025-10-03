@@ -19,7 +19,7 @@ async function handleUserSignup(req, res) {
         const emailExist = await User.findOne({ email: email });
         const usernameExist = await User.findOne({ username: username });
         if (emailExist || usernameExist) {
-            return res.status(400).json({ error: "Email is already registered" });
+            return res.status(400).json({ error: "Email/Username is already registered" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +32,7 @@ async function handleUserSignup(req, res) {
         });
 
         // Send JSON response indicating success
-        res.status(201).json({ success: true, message: "Signup successful" });
+        res.status(201).json({ success: true, message: "Signup successful" }).redirect('/auth/signin');
 
     } catch (error) {
         console.error("Signup error: ", error);
