@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    username: {
-        type: String,
-        required: true,
-        unique: true
     },
     email: {
         type: String,
@@ -19,17 +13,34 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    college_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'College',
+        required: true
+    },
+    department: {
+        type: String,
+        required: true
+    },
+    year_of_study: {
+        type: Number,
+        required: true  
+    },
+    interest: {
+        type: [String],
+    },
+    profileIMG: {
+        type: String,
+    },
+    bannerIMG: {
+        type: String,
+    },
+    role: {
+        type: String,
+        enum: ['student', 'clubMember', 'Admin'],
+        default: 'student'
     }
-}, { timestamp: true });
+}, { timestamps: true });
 
-
-
-userSchema.methods.validatePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-};
-
-
-const User = mongoose.model('user', userSchema);
-
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);
