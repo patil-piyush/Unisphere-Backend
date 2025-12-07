@@ -14,9 +14,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    college_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'College',
+    college_Name: {
+        type: String,
         required: true
     },
     department: {
@@ -38,7 +37,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'clubMember', 'Admin'],
+        enum: ['student', 'clubMember', 'admin'],
         default: 'student'
     }
 }, { timestamps: true });
