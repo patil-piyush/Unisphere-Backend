@@ -8,11 +8,13 @@ module.exports = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (decoded.role !== "president" || decoded.type !== "club") {
-      return res.status(403).json({ message: "Forbidden: Club access only" });
+    if (decoded.type !== "member") {
+      return res.status(403).json({ message: "Forbidden: Member access only" });
     }
 
-    req.clubId = decoded.id;
+    req.memberId = decoded.memberId;
+    req.clubId = decoded.clubId;
+    req.role = decoded.role; // member
     next();
 
   } catch (err) {
