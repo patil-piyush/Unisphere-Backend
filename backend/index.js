@@ -9,6 +9,11 @@ const clubRoutes = require("./routes/clubRoutes");
 const clubMemberRoutes = require("./routes/clubMemberRoutes");
 const userRoutes = require("./routes/userRoutes");
 
+//events related routes can be added similarly
+const eventRoutes = require("./routes/eventsRoutes");
+const eventRegistrationRoutes = require("./routes/eventRegistrationRoute");
+const eventCommentRoutes = require("./routes/eventCommentRoute");
+
 const app = express();
 
 // Middleware
@@ -23,6 +28,11 @@ app.use(cookieParser());
 app.use("/api/clubs", clubRoutes);
 app.use("/api/members", clubMemberRoutes);
 app.use("/api/users", userRoutes);
+
+//Routes Event Related
+app.use("/api/events", eventRoutes);
+app.use("/api/event-registrations", eventRegistrationRoutes);
+app.use("/api/event-comments", eventCommentRoutes);
 
 // Connect DB and start server
 connection().then(() => {

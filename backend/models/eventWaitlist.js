@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const eventRegistrationSchema = new mongoose.Schema({
+const eventWaitListSchema = new mongoose.Schema({
     event_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
@@ -11,12 +11,14 @@ const eventRegistrationSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    registration_date: {
+    joined_at: {
         type: Date,
         default: Date.now,
-    },
-}, { timestamps: true });
+    }
+},{timestamps: true});
 
-eventRegistrationSchema.index({ event_id: 1, user_id: 1 }, { unique: true });
+eventWaitListSchema.index({ event_id: 1, user_id: 1 }, { unique: true });
 
-module.exports = mongoose.model('EventRegistration', eventRegistrationSchema);
+const EventWaitList = mongoose.model('EventWaitList', eventWaitListSchema);
+
+module.exports = EventWaitList;

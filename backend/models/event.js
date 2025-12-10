@@ -17,10 +17,14 @@ const eventSchema = new mongoose.Schema({
     bannerURL: {
         type: String,
     },
+    category: {
+        type: String,
+        enum: ['Workshop', 'Seminar', 'Social', 'Competition', 'Other'],
+        default: 'Seminar'
+    },
     tag: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Club',
-        required: true,
+        type: [String],
+        default: []
     },
     date: {
         type: Date,
@@ -46,17 +50,25 @@ const eventSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    registration_count: {
+        type: Number,
+        default: 0,
+    },
     location_coordinates: {
         type: {
             type: String,
             enum: ['Point'],
-            required: true,
+            default: 'Point',
         },
         coordinates: {
             type: [Number],
             required: true,
         },
     },
+    isClosed: {
+        type: Boolean,
+        default: false,
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Event', eventSchema);
