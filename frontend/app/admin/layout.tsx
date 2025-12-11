@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard/sidebar"
 import { DashboardHeader } from "@/components/dashboard/header"
@@ -15,19 +14,39 @@ export default function AdminLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-background">
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-      )}
-
-      <div className={cn("lg:block", isSidebarOpen ? "block" : "hidden")}>
+    <div className="flex h-screen bg-background" suppressHydrationWarning>
+      {/* Sidebar */}
+      <aside
+        suppressHydrationWarning
+        className={cn(
+          "fixed left-0 top-0 z-40 h-screen w-64 border-r border-border/50 bg-card/50 backdrop-blur-xl transition-transform duration-300 lg:static lg:translate-x-0",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
         <DashboardSidebar role="super-admin" />
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden" suppressHydrationWarning>
+        {/* Header */}
+        <header suppressHydrationWarning className="border-b border-border/50 bg-card/50 backdrop-blur-xl sticky top-0 z-30">
+          <DashboardHeader onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+        </header>
+
+        {/* Page Content */}
+        <main suppressHydrationWarning className="flex-1 overflow-y-auto">
+          <div className="p-6">{children}</div>
+        </main>
       </div>
 
-      <div className="lg:pl-64 transition-all duration-300">
-        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} />
-        <main className="p-4 md:p-6 lg:p-8">{children}</main>
-      </div>
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          suppressHydrationWarning
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </div>
   )
 }

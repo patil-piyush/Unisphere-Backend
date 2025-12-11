@@ -25,3 +25,6 @@ dist-ssr
 
 .env
 .next
+
+.env.local
+.env.*.local

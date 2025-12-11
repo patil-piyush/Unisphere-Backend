@@ -19,7 +19,7 @@ export function ClubCard({ id, name, description, image, members, events, catego
   return (
     <div className="glass rounded-2xl p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
       <div className="flex items-start gap-4">
-        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
+        <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0">
           <Image
             src={image || "/placeholder.svg"}
             alt={name}

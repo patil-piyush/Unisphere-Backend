@@ -1,6 +1,7 @@
 import { Poppins, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
+// import { AuthProvider } from "@/components/auth-context"
 import "./globals.css"
 
 const poppins = Poppins({
@@ -15,7 +16,7 @@ export const metadata = {
   title: "UniSphere — Your College Universe of Events",
   description:
     "UniSphere - College Event Management & Smart Attendance System. Discover events, track attendance, earn certificates.",
-    generator: 'v0.app'
+  generator: 'v0.app'
 }
 
 export default function RootLayout({ children }) {
@@ -23,7 +24,9 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.className} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
-          {children}
+          {/* <AuthProvider> */}
+            {children}
+          {/* </AuthProvider> */}
         </ThemeProvider>
         <Analytics />
       </body>

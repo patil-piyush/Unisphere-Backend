@@ -44,7 +44,7 @@ const superAdminLinks = [
   { icon: Users, label: "Clubs", href: "/admin/clubs" },
   { icon: Calendar, label: "Events", href: "/admin/events" },
   { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
-  { icon: DollarSign, label: "Budgets", href: "/admin/budgets" },
+  { icon: DollarSign, label: "Budget", href: "/admin/budget" },
   { icon: Flag, label: "Reports", href: "/admin/reports" },
 ]
 
@@ -63,7 +63,7 @@ export function DashboardSidebar({ role = "student" }) {
     >
       <div className="p-4 border-b border-sidebar-border">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-sidebar-primary flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-sidebar-primary flex items-center justify-center shrink-0">
             <span className="text-sidebar-primary-foreground font-bold text-lg">U</span>
           </div>
           {!isCollapsed && (
@@ -88,7 +88,7 @@ export function DashboardSidebar({ role = "student" }) {
                   : "text-sidebar-foreground hover:bg-sidebar-accent",
               )}
             >
-              <link.icon className="h-5 w-5 flex-shrink-0" />
+              <link.icon className="h-5 w-5 shrink-0" />
               {!isCollapsed && <span className="font-medium">{link.label}</span>}
             </Link>
           )
@@ -100,11 +100,11 @@ export function DashboardSidebar({ role = "student" }) {
           href="/dashboard/settings"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
         >
-          <Settings className="h-5 w-5 flex-shrink-0" />
+          <Settings className="h-5 w-5 shrink-0" />
           {!isCollapsed && <span className="font-medium">Settings</span>}
         </Link>
         <button className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sidebar-foreground hover:bg-destructive/10 hover:text-destructive transition-colors w-full">
-          <LogOut className="h-5 w-5 flex-shrink-0" />
+          <LogOut className="h-5 w-5 shrink-0" />
           {!isCollapsed && <span className="font-medium">Logout</span>}
         </button>
       </div>

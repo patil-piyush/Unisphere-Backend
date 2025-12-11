@@ -80,7 +80,7 @@ export default function MyEventsPage() {
           <div className="space-y-4">
             {upcomingEvents.map((event) => (
               <div key={event.id} className="glass rounded-2xl p-4 flex flex-col sm:flex-row gap-4">
-                <div className="w-full sm:w-36 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                <div className="w-full sm:w-36 h-24 rounded-xl overflow-hidden shrink-0">
                   <Image
                     src={event.image || "/placeholder.svg"}
                     alt={event.title}
@@ -136,7 +136,7 @@ export default function MyEventsPage() {
           <div className="space-y-4">
             {pastEvents.map((event) => (
               <div key={event.id} className="glass rounded-2xl p-4 flex flex-col sm:flex-row gap-4">
-                <div className="w-full sm:w-36 h-24 rounded-xl overflow-hidden flex-shrink-0">
+                <div className="w-full sm:w-36 h-24 rounded-xl overflow-hidden shrink-0">
                   <Image
                     src={event.image || "/placeholder.svg"}
                     alt={event.title}
