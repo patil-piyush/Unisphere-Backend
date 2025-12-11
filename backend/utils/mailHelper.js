@@ -1,6 +1,6 @@
 const transporter = require('../config/mail.js');
 
-const senRegistrationEmail = (user, event) => {
+const sendRegistrationEmail = (user, event) => {
     transporter.sendMail({
         from: `"UniSphere Events" <${process.env.EMAIL_USER}>`,
         to: user.email,
@@ -51,7 +51,7 @@ const sendPromotionEmail = (user, event) => {
 };
 
 module.exports = {
-  senRegistrationEmail,
+  sendRegistrationEmail,
   sendWaitingEmail,
   sendPromotionEmail
 };

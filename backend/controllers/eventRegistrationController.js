@@ -6,10 +6,10 @@ const {
   sendRegistrationEmail,
   sendWaitingEmail,
   sendPromotionEmail
-} = require("../utils/mailHelpers");
+} = require("../utils/mailHelper");
 
 // User registers for event (with waiting list)
-exports.registerForEvent = async (req, res) => {
+const registerForEvent = async (req, res) => {
   try {
     const user_id = req.userId;
     const { event_id } = req.body;
@@ -66,7 +66,7 @@ exports.registerForEvent = async (req, res) => {
 };
 
 // Cancel registration (user) + promote from waitlist
-exports.cancelRegistration = async (req, res) => {
+const cancelRegistration = async (req, res) => {
   try {
     const user_id = req.userId;
     const { event_id } = req.body;
@@ -109,7 +109,7 @@ exports.cancelRegistration = async (req, res) => {
 };
 
 // Get events current user is registered for
-exports.getMyRegisteredEvents = async (req, res) => {
+const getMyRegisteredEvents = async (req, res) => {
   try {
     const regs = await EventRegistration.find({ user_id: req.userId })
       .populate("event_id");
@@ -118,4 +118,11 @@ exports.getMyRegisteredEvents = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+
+module.exports = {
+  registerForEvent,
+  cancelRegistration,
+  getMyRegisteredEvents
 };

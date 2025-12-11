@@ -18,10 +18,10 @@ router.get("/", getAllEvents);
 router.get("/:id", getEventById);
 
 // Club specific (place before /:id if needed)
-router.get("/club/my/events", clubAuth, getClubEvents);
+router.get("/club/myevents", clubAuth, getClubEvents);
 router.get("/:id/registrations", clubAuth, getEventRegistrations);
 
-// Modify/create after
+// Modify create after
 router.post("/", clubAuth, createEvent);
 router.put("/:id", clubAuth, updateEvent);
 router.delete("/:id", clubAuth, deleteEvent);

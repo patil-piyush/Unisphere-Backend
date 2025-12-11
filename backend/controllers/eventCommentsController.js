@@ -4,7 +4,7 @@ const EventRegistration = require("../models/eventRegistration");
 // Only registered users can comment
 
 // Add comment
-exports.addComment = async (req, res) => {
+const addComment = async (req, res) => {
   try {
     const user_id = req.userId;
     const { event_id, content, parent_comment_id } = req.body;
@@ -28,7 +28,7 @@ exports.addComment = async (req, res) => {
 };
 
 // Get comments for an event (public)
-exports.getEventComments = async (req, res) => {
+const getEventComments = async (req, res) => {
   try {
     const comments = await Comment.find({ event_id: req.params.eventId })
       .populate("user_id", "name profileIMG")
@@ -41,7 +41,7 @@ exports.getEventComments = async (req, res) => {
 };
 
 // Delete comment (only owner for now)
-exports.deleteComment = async (req, res) => {
+const deleteComment = async (req, res) => {
   try {
     const user_id = req.userId;
     const comment = await Comment.findById(req.params.commentId);
@@ -61,7 +61,7 @@ exports.deleteComment = async (req, res) => {
 };
 
 // Like / Unlike comment (toggle)
-exports.toggleLikeComment = async (req, res) => {
+const toggleLikeComment = async (req, res) => {
   try {
     const user_id = req.userId;
     const comment = await Comment.findById(req.params.commentId);
@@ -84,4 +84,11 @@ exports.toggleLikeComment = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+module.exports = {
+  addComment,
+  getEventComments,
+  deleteComment,
+  toggleLikeComment
 };

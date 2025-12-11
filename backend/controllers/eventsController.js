@@ -1,5 +1,5 @@
 const Event = require('../models/event')
-const EventResgistration = require('../models/eventRegistration')
+const EventRegistration = require('../models/eventRegistration')
 const EventWaitlist = require('../models/eventWaitlist')
 const transporter = require('../config/mail')
 
@@ -32,7 +32,7 @@ const createEvent = async (req, res) => {
         }
 
         const event = await Event.create({
-            club_id: req.club_id,
+            club_id: req.clubId,
             title,
             description,
             bannerURL,
@@ -53,25 +53,38 @@ const createEvent = async (req, res) => {
 }
 
 // update event details both president and members
-const updateEvent = async(req, res) => {
-    try{
-        const event = req.body;
-        if(!event) return res.status(404).json({message:"Event Not Found"});
+const updateEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
 
-        if(event.club_id.toString() !== req.club_id){
-            return res.status(403).json({ error: 'Unauthorized to update this event' });
-        }
-
-        const updated = await Event.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {new: true}
-        )
-        res.status(200).json({message: "Event Updated Successfully", updated});
-    }catch(error){
-        res.status(400).json({error: error.message});
+    // Fetch real event from DB
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event Not Found" });
     }
-}
+
+    // Authorization: Only this club can update its event
+    if (event.club_id.toString() !== req.clubId.toString()) {
+      return res.status(403).json({ error: "Unauthorized to update this event" });
+    }
+
+    // Update event
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Event Updated Successfully",
+      event: updatedEvent
+    });
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // delete event president only 
 const deleteEvent = async(req, res) => {
@@ -94,39 +107,46 @@ const deleteEvent = async(req, res) => {
 };
 
 //close registration
-const closeRegistration = async(req, res) => {
-    try{
-        const event = await Event.findById(req.params.id);
-        if(!event) return res.status(404).json({message:"Event Not Found"});
+const closeRegistration = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event Not Found" });
 
-        if(event.club_id.toString != req.clubId) return res.status(403).json({error: "Not your event"});
-
-        event.isClosed = true;
-        await event.save();
-        res.status(200).json({message:"Event Registrations Closed"});
-
-    }catch(error){
-        res.status(500).json({error: error.message});
+    if (event.club_id.toString() !== req.clubId.toString()) {
+      return res.status(403).json({ error: "Not your event" });
     }
-}
+
+    event.isClosed = true;    // <-- FIXED
+    await event.save();
+
+    res.status(200).json({ message: "Event Registrations Closed" });
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 //reopen registration
 
-const openRegistration = async(req, res) => {
-    try{
-        const event = event.findById(req.params.id);
-        if(!event) return res.status(404).json({message:"Event Not Found"});
+const openRegistration = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: "Event Not Found" });
 
-        if(event.club_id.toString != req.clubId) return res.status(403).json({error: "Not your event"});
-
-        event.isClosed = false;
-        await event.save();
-
-        res.status(200).json({message:"Event Registrations Reopened",event});
-    }catch(error){
-        res.status(500).json({error: error.message});
+    if (event.club_id.toString() !== req.clubId.toString()) {
+      return res.status(403).json({ error: "Not your event" });
     }
-}
+
+    event.isClosed = false;   // <-- FIXED
+    await event.save();
+
+    res.status(200).json({ message: "Event Registrations Opened" }); // <-- FIXED MESSAGE
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // get all events 
 const getAllEvents = async(req,res) => {
@@ -146,7 +166,7 @@ const getAllEvents = async(req,res) => {
 //get event of logged-in clubs
 const getClubEvents = async(req,res) => {
     try{
-        const events = await Event.find({club_id: req.club_id})
+        const events = await Event.find({club_id: req.clubId})
             .sort({start_time:1});
 
         if(!events) return res.status(404).json({message: "No Events Found"});
@@ -178,3 +198,29 @@ const getEventRegistrations = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// get event by id public
+const getEventById = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id)
+      .populate("club_id", "name logoURL");
+
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+    createEvent,
+    updateEvent,
+    deleteEvent,
+    closeRegistration,
+    openRegistration,
+    getAllEvents,
+    getClubEvents,
+    getEventRegistrations,
+    getEventById
+}

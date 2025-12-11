@@ -50,7 +50,7 @@ const eventSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    registration_count: {
+    registeredCount: {
         type: Number,
         default: 0,
     },
