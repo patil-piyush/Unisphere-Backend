@@ -20,12 +20,12 @@ export function ClubAdminLoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
-
+  
     if (!email || !password) {
       setError("Please enter both email and password")
       return
     }
-
+  
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Please enter a valid email address")
       return
@@ -35,22 +35,22 @@ export function ClubAdminLoginForm() {
       setError("Password must be at least 6 characters")
       return
     }
-
-    setIsLoading(true)
+  
+    setIsLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/club-admin/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // })
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // TODO: Implement proper auth storage
-      sessionStorage.setItem("clubAdminToken", "temp-club-admin-token-" + Date.now())
-      router.push("/club-admin")
+      const response = await fetch('http://localhost:5000/api/clubs/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include' // This ensures cookies are sent with the request
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+  
+      router.push("/club-admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.")
     } finally {

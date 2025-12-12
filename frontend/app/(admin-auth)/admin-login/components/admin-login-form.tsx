@@ -38,19 +38,20 @@ export function AdminLoginForm() {
 
     setIsLoading(true)
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/admin/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // })
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // TODO: Implement proper auth storage
-      sessionStorage.setItem("adminToken", "temp-admin-token-" + Date.now())
-      router.push("/admin")
+      // change the URL to match admin login endpoint
+      const response = await fetch('http://localhost:5000/api/clubs/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include' // This ensures cookies are sent with the request
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+  
+      router.push("/admin");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed. Please try again.")
     } finally {

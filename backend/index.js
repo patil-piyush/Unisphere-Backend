@@ -19,10 +19,10 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors({
-//   origin: "http://localhost:3000", // your frontend
-//   credentials: true
-// }));
+app.use(cors({
+  origin: "http://localhost:3000", // your frontend
+  credentials: true
+}));
 
 // Routes
 app.use("/api/clubs", clubRoutes);
