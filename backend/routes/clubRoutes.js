@@ -26,13 +26,13 @@ router.post('/login', loginClub);
 // Auth Club
 router.post('/logout', clubAuth, logoutClub);
 router.put('/change-password', clubAuth, changeClubPassword);
-router.get('/', clubAuth, getAllClubs);
+// router.get('/', clubAuth, getAllClubs);
 router.put('/:id', clubAuth, updateClub);
 router.delete('/:id', clubAuth, deleteClub);
 
 // Club management by club
-router.post('/members/:clubId', clubAuth, addClubMember);
-router.delete('/members/:clubId/:memberId', clubAuth, removeClubMember);
-router.get('/members/:clubId', clubAuth, getClubMembers);
+router.post('/member/:clubId', clubAuth, addClubMember);
+router.delete('/member/:clubId/:memberId', clubAuth, removeClubMember);
+router.get('/member/:clubId', clubAuth, getClubMembers);
 
 module.exports = router;

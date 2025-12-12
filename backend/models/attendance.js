@@ -11,20 +11,15 @@ const attendanceSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    location_coordinates: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
-        required: true
-    },
     check_in_time: {
         type: Date,
-        required: true
+        default: Date.now
     },
     check_out_time: {
-        type: Date,
+        type: Date
     }
 }, { timestamps: true });
 
-const Attendance = mongoose.model('Attendance', attendanceSchema);
+attendanceSchema.index({ event_id: 1, user_id: 1 }, { unique: true });
 
-module.exports = Attendance;
+module.exports = mongoose.model('Attendance', attendanceSchema);

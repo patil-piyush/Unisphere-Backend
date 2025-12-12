@@ -1,0 +1,277 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "UniSphere API",
+    "version": "1.0.0",
+    "description": "Official Backend API documentation for UniSphere"
+  },
+
+  "servers": [
+    {
+      "url": "http://localhost:5000/api"
+    }
+  ],
+
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "token"
+      }
+    },
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" },
+          "tag": { "type": "array", "items": { "type": "string" }},
+          "date": { "type": "string", "format": "date" },
+          "venue": { "type": "string" },
+          "start_time": { "type": "string" },
+          "end_time": { "type": "string" },
+          "deadline": { "type": "string", "format": "date" },
+          "max_capacity": { "type": "number" },
+          "location_coordinates": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "example": "Point" },
+              "coordinates": {
+                "type": "array",
+                "items": { "type": "number" },
+                "example": [73.8567, 18.5204]
+              }
+            }
+          }
+        }
+      },
+
+      "RegisterEvent": {
+        "type": "object",
+        "properties": {
+          "event_id": { "type": "string" }
+        }
+      },
+
+      "StartQR": {
+        "type": "object",
+        "properties": {
+          "duration": { "type": "integer", "example": 30 }
+        }
+      },
+
+      "ScanAttendance": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" }
+        }
+      }
+    }
+  },
+
+  "security": [
+    { "cookieAuth": [] }
+  ],
+
+  "tags": [
+    { "name": "Auth", "description": "User & Club Authentication" },
+    { "name": "Clubs", "description": "Club operations (club only)" },
+    { "name": "Events", "description": "Event creation & management" },
+    { "name": "Registrations", "description": "Event registration system" },
+    { "name": "Attendance", "description": "QR-based attendance" },
+    { "name": "Members", "description": "Club member management" }
+  ],
+
+  "paths": {
+
+    "/clubs/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Club login (returns token cookie)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "email": "techclub@example.com",
+                "password": "clubpass123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Club logged in" },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    },
+
+    "/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login (returns token cookie)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "email": "student@example.com",
+                "password": "12345678"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User logged in" },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    },
+
+    "/events": {
+      "post": {
+        "tags": ["Events"],
+        "summary": "Create an event (club only)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Event" },
+              "example": {
+                "title": "Tech Talk",
+                "description": "AI Seminar",
+                "category": "Seminar",
+                "tag": ["AI", "ML"],
+                "date": "2025-12-30",
+                "venue": "Auditorium",
+                "start_time": "10:00 AM",
+                "end_time": "12:00 PM",
+                "deadline": "2025-12-29",
+                "max_capacity": 100,
+                "location_coordinates": {
+                  "type": "Point",
+                  "coordinates": [73.8567, 18.5204]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Event created" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+
+      "get": {
+        "tags": ["Events"],
+        "summary": "Get all events",
+        "responses": {
+          "200": { "description": "Events list returned" }
+        }
+      }
+    },
+
+    "/events/{eventId}": {
+      "put": {
+        "tags": ["Events"],
+        "summary": "Update event (club only)",
+        "parameters": [
+          { "in": "path", "name": "eventId", "required": true }
+        ],
+        "responses": { "200": { "description": "Event updated" } }
+      },
+
+      "delete": {
+        "tags": ["Events"],
+        "summary": "Delete event (club only)",
+        "parameters": [
+          { "in": "path", "name": "eventId", "required": true }
+        ],
+        "responses": { "200": { "description": "Event deleted" } }
+      }
+    },
+
+    "/event-registrations/register": {
+      "post": {
+        "tags": ["Registrations"],
+        "summary": "Register user for event",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RegisterEvent" },
+              "example": { "event_id": "653ab56a8b..." }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Registered or waitlisted" }
+        }
+      }
+    },
+
+    "/events/{eventId}/attendance/start": {
+      "post": {
+        "tags": ["Attendance"],
+        "summary": "Start attendance QR session (club only)",
+        "parameters": [
+          { "in": "path", "name": "eventId", "required": true }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/StartQR" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "QR session started" }
+        }
+      }
+    },
+
+    "/events/{eventId}/attendance/next-token": {
+      "get": {
+        "tags": ["Attendance"],
+        "summary": "Get next rotating QR token (club only)",
+        "parameters": [
+          { "in": "path", "name": "eventId", "required": true }
+        ],
+        "responses": {
+          "200": { "description": "New QR token returned" }
+        }
+      }
+    },
+
+    "/events/attendance/scan": {
+      "post": {
+        "tags": ["Attendance"],
+        "summary": "Scan QR to mark attendance (user only)",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ScanAttendance" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Attendance marked" },
+          "409": { "description": "Duplicate attendance" }
+        }
+      }
+    },
+
+    "/events/{eventId}/attendance/live": {
+      "get": {
+        "tags": ["Attendance"],
+        "summary": "Live attendance feed (club only)",
+        "parameters": [
+          { "in": "path", "name": "eventId", "required": true }
+        ],
+        "responses": {
+          "200": { "description": "Attendance list" }
+        }
+      }
+    }
+  }
+}

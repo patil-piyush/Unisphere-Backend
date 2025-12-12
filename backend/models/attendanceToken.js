@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const attendanceSchema = new mongoose.Schema({
-    event_id:{
-        type : mongoose.Schema.Types.ObjectId,
+const attendanceTokenSchema = new mongoose.Schema({
+    event_id: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
         required: true
     },
@@ -13,8 +13,15 @@ const attendanceSchema = new mongoose.Schema({
     },
     expiration: {
         type: Date,
+        required: true,
+        index: { expires: 0 }   // auto-delete after expiration
+    },
+    duration: {
+        type: Number, // seconds
         required: true
-    },  
+    }
 }, { timestamps: true });
 
-module.exports = mongoose.model('AttendanceToken', attendanceSchema);
+attendanceTokenSchema.index({ event_id: 1, token: 1 }, { unique: true });
+
+module.exports = mongoose.model('AttendanceToken', attendanceTokenSchema);

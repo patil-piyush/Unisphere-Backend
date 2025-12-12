@@ -8,11 +8,16 @@ const connection = require("./config/db");
 const clubRoutes = require("./routes/clubRoutes");
 const clubMemberRoutes = require("./routes/clubMemberRoutes");
 const userRoutes = require("./routes/userRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
 
 //events related routes can be added similarly
 const eventRoutes = require("./routes/eventsRoutes");
 const eventRegistrationRoutes = require("./routes/eventRegistrationRoute");
 const eventCommentRoutes = require("./routes/eventCommentRoute");
+
+//swaggere related
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger/swagger.json");
 
 const app = express();
 
@@ -33,6 +38,12 @@ app.use("/api/users", userRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/event-registrations", eventRegistrationRoutes);
 app.use("/api/event-comments", eventCommentRoutes);
+
+//Attendance Routes 
+app.use("/api", attendanceRoutes);
+
+//swagger setup
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Connect DB and start server
 connection().then(() => {

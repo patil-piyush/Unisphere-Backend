@@ -7,8 +7,8 @@ const {
   getMyRegisteredEvents
 } = require("../controllers/eventRegistrationController");
 
-router.post("/", userAuthMiddleware, registerForEvent);
-router.delete("/", userAuthMiddleware, cancelRegistration);
+router.post("/:eventId", userAuthMiddleware, registerForEvent);
+router.delete("/:eventId", userAuthMiddleware, cancelRegistration);
 router.get("/my", userAuthMiddleware, getMyRegisteredEvents);
 
 module.exports = router;

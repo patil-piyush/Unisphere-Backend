@@ -43,7 +43,7 @@ const loginClubMember = async (req, res) => {
         memberId: member._id,
         clubId: member.club_id,
         role: member.role,
-        type: "club-member"
+        type: "member"
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
@@ -66,7 +66,8 @@ const loginClubMember = async (req, res) => {
 // Get all members of logged-in club
 const getClubMembers = async (req, res) => {
   try {
-    const members = await ClubMember.find({ club_id: req.clubId });
+    const { clubId } = req.params;
+    const members = await ClubMember.find({ club_id: clubId });
     res.status(200).json(members);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -76,9 +77,12 @@ const getClubMembers = async (req, res) => {
 // Remove member (club only)
 const removeClubMember = async (req, res) => {
   try {
+
+    const { clubId, memberId } = req.params;
+
     const member = await ClubMember.findOneAndDelete({
-      _id: req.params.id,
-      club_id: req.clubId
+      _id: memberId,
+      club_id: clubId
     });
 
     if (!member) return res.status(404).json({ message: "Member not found" });
